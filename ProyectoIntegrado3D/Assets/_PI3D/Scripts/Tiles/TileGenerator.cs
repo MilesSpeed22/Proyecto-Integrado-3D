@@ -26,21 +26,35 @@ public class TileGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (spawnZ < player.position.z + (tilesOnScreen * tileLength))
-        {
-            SpawnTile();
-            DeleteTile();
-        }
+        if (activeTiles.Count == 0) return;
+
+        GameObject lastTile = activeTiles[activeTiles.Count - 1];
+
+        if (lastTile.transform.position.z < player.position.z + (tilesOnScreen * tileLength)) SpawnTile();
+
+        GameObject firstTile = activeTiles[0];
+
+        if (firstTile.transform.position.z < player.position.z - tileLength) DeleteTile();
     }
 
     void SpawnTile()
     {
         int index = GetRandomPrefabIndex();
 
-        GameObject tile = Instantiate(tilePrefabs[index], Vector3.forward * spawnZ, Quaternion.identity);
+        Vector3 spawnPos;
 
+        if (activeTiles.Count == 0)
+        {
+            spawnPos = Vector3.zero;
+        }
+        else
+        {
+            GameObject lastTile = activeTiles[activeTiles.Count - 1];
+            spawnPos = lastTile.transform.position + Vector3.forward * tileLength;
+        }
+
+        GameObject tile = Instantiate(tilePrefabs[index], spawnPos, Quaternion.identity);
         activeTiles.Add(tile);
-        spawnZ += tileLength;
     }
 
     void DeleteTile()
