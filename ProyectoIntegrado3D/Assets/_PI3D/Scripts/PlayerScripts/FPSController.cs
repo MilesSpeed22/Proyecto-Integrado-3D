@@ -11,12 +11,10 @@ public class FPSController : MonoBehaviour
     Animator anim;
 
     Vector2 move;
-    Vector2 look;
     float lookRotation;
 
     [Header("Movement & Look Stats")]
-    [SerializeField] GameObject camHolder;
-    public float speed, maxForce, sensitivity;
+    public float speed, maxForce;
 
     [Header("Jumping & GroundCheck Configuration")]
     public float jumpForce;
@@ -30,7 +28,6 @@ public class FPSController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        camHolder = GameObject.Find("CameraHolder");
         groundCheck = GameObject.Find("GroundCheck");
     }
     void Start()
@@ -51,11 +48,11 @@ public class FPSController : MonoBehaviour
     void Movement()
     {
         Vector3 currentVelocity = rb.linearVelocity;
-        Vector3 targetVelocity = new Vector3(move.x, 0, move.y);
-        targetVelocity = transform.TransformDirection(targetVelocity);
+        Vector3 targetVelocity = new Vector3(move.x * speed, currentVelocity.y, 0);
+
         Vector3 velocityChange = (targetVelocity - currentVelocity);
-        velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
-        Vector3.ClampMagnitude(velocityChange, maxForce);
+        velocityChange = new Vector3(velocityChange.x, 0, 0);
+
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
     }
 
@@ -69,11 +66,6 @@ public class FPSController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
-    }
-
-    public void OnLook(InputAction.CallbackContext context)
-    {
-        look = context.ReadValue<Vector2>();
     }
 
     public void OnJump(InputAction.CallbackContext context)
