@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class TileGenerator : MonoBehaviour
 {
@@ -10,17 +11,20 @@ public class TileGenerator : MonoBehaviour
     public int tilesOnScreen = 5;
 
     public Transform player;
-
-    private float spawnZ = 0f;
     private List<GameObject> activeTiles = new List<GameObject>();
 
     private int lastPrefabIndex = -1;
+
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI meters;
+    int metersCount = 0;
 
     private void Start()
     {
         for (int i = 0; i < tilesOnScreen; i++)
         {
             SpawnTile();
+            UpdateUI();
         }
     }
 
@@ -61,6 +65,9 @@ public class TileGenerator : MonoBehaviour
     {
         Destroy(activeTiles[0]);
         activeTiles.RemoveAt(0);
+
+        metersCount += Mathf.RoundToInt(tileLength);
+        UpdateUI();
     }
 
     int GetRandomPrefabIndex()
@@ -76,5 +83,10 @@ public class TileGenerator : MonoBehaviour
 
         lastPrefabIndex = randomIndex;
         return randomIndex;
+    }
+
+    void UpdateUI()
+    {
+        meters.text = metersCount + " m";
     }
 }

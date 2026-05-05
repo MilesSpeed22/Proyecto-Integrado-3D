@@ -24,6 +24,11 @@ public class FPSController : MonoBehaviour
     [SerializeField] float groundDetectRadius = 0.1f;
     [SerializeField] LayerMask groundLayer;
 
+
+    [Header("Movement beetwen lanes")]
+    [SerializeField] float laneDistance = 2f;
+    [SerializeField] float laneChangeSpeed = 10f;
+    int currentLane = 0;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,13 +52,11 @@ public class FPSController : MonoBehaviour
 
     void Movement()
     {
-        Vector3 currentVelocity = rb.linearVelocity;
-        Vector3 targetVelocity = new Vector3(move.x * speed, currentVelocity.y, 0);
+        Vector3 targetPosition = new Vector3(currentLane * laneDistance, transform.position.y, transform.position.z);
 
-        Vector3 velocityChange = (targetVelocity - currentVelocity);
-        velocityChange = new Vector3(velocityChange.x, 0, 0);
+        Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, laneChangeSpeed * Time.fixedDeltaTime);
 
-        rb.AddForce(velocityChange, ForceMode.VelocityChange);
+        rb.MovePosition(newPosition);
     }
 
     void Jump()
@@ -65,7 +68,20 @@ public class FPSController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        move = context.ReadValue<Vector2>();
+        if (!context.performed) return;
+
+        float input = context.ReadValue<Vector2>().x;
+
+        if (input > 0)
+        {
+            currentLane++;
+        }
+        else if (input < 0) 
+        {
+            currentLane--;
+        }
+
+        currentLane = Mathf.Clamp(currentLane, -1, 1);
     }
 
     public void OnJump(InputAction.CallbackContext context)
