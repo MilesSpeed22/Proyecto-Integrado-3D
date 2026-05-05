@@ -9,12 +9,11 @@ public class FPSController : MonoBehaviour
 
     Rigidbody rb;
     Animator anim;
-
     Vector2 move;
     float lookRotation;
 
     [Header("Movement & Look Stats")]
-    public float speed, maxForce;
+    public float speed;
 
     [Header("Jumping & GroundCheck Configuration")]
     public float jumpForce;
@@ -29,6 +28,8 @@ public class FPSController : MonoBehaviour
     [SerializeField] float laneDistance = 2f;
     [SerializeField] float laneChangeSpeed = 10f;
     int currentLane = 0;
+
+    [SerializeField] bool isCrouching;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -87,5 +88,15 @@ public class FPSController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         Jump();
+    }
+
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isCrouching = !isCrouching;
+            anim.SetBool("isCrouching", isCrouching);
+            Debug.Log("Agacharse");
+        }
     }
 }
