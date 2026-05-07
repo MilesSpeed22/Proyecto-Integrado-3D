@@ -108,7 +108,6 @@ public class FPSController : MonoBehaviour
         if (context.performed && !isCrouching)
         {
             StartCoroutine(CrouchAction());
-            Debug.Log("Crocuh");
         }
     }
 }
