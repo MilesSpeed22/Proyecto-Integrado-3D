@@ -67,6 +67,19 @@ public class FPSController : MonoBehaviour
         rb.linearVelocity = jumpForces;
     }
 
+    IEnumerator CrouchAction()
+    {
+        isCrouching = true;
+
+        anim.SetBool("isCrouching", true);
+
+        yield return new WaitForSeconds(1f);
+
+        anim.SetBool("isCrouching", false);
+
+        isCrouching = false;
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
@@ -92,11 +105,10 @@ public class FPSController : MonoBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !isCrouching)
         {
-            isCrouching = !isCrouching;
-            anim.SetBool("isCrouching", isCrouching);
-            Debug.Log("Agacharse");
+            StartCoroutine(CrouchAction());
+            Debug.Log("Crocuh");
         }
     }
 }
