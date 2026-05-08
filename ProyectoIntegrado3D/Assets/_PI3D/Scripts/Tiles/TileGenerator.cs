@@ -19,6 +19,10 @@ public class TileGenerator : MonoBehaviour
     [SerializeField] TextMeshProUGUI meters;
     int metersCount = 0;
 
+    [Header("Speed")]
+    [SerializeField] float speedIncrease = 0.5f;
+    [SerializeField] float maxSpeed = 30f;
+
     private void Start()
     {
         for (int i = 0; i < tilesOnScreen; i++)
@@ -66,7 +70,9 @@ public class TileGenerator : MonoBehaviour
         Destroy(activeTiles[0]);
         activeTiles.RemoveAt(0);
 
-        metersCount += Mathf.RoundToInt(tileLength);
+        metersCount += 1;
+
+        TilesMovement.speed = Mathf.Clamp(10f + speedIncrease * 0.05f, 0, maxSpeed);
         UpdateUI();
     }
 
