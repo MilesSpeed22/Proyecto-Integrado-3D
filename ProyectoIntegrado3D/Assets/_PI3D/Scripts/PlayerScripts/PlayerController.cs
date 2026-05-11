@@ -8,7 +8,7 @@ public class FPSController : MonoBehaviour
 {
 
     Rigidbody rb;
-    Animator anim;
+    [SerializeField] Animator anim;
     Vector2 move;
     float lookRotation;
 
@@ -33,7 +33,6 @@ public class FPSController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
         groundCheck = GameObject.Find("GroundCheck");
     }
     void Start()
@@ -62,20 +61,20 @@ public class FPSController : MonoBehaviour
 
     void Jump()
     {
+        if (!isGrounded) return;
         Vector3 jumpForces = rb.linearVelocity;
-        if (isGrounded) jumpForces.y = jumpForce;
+        jumpForces.y = jumpForce;
         rb.linearVelocity = jumpForces;
+        anim.SetTrigger("Jump");
     }
 
     IEnumerator CrouchAction()
     {
         isCrouching = true;
 
-        anim.SetBool("isCrouching", true);
+        anim.SetTrigger("Roll");
 
         yield return new WaitForSeconds(1f);
-
-        anim.SetBool("isCrouching", false);
 
         isCrouching = false;
     }
