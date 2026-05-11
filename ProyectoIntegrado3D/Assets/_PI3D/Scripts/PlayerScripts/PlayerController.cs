@@ -8,6 +8,10 @@ public class FPSController : MonoBehaviour
 {
 
     Rigidbody rb;
+    CapsuleCollider capsuleCollider;
+    float originalHeight;
+    Vector3 originalCenter;
+    [SerializeField] float rollDuration = 1f;
     [SerializeField] Animator anim;
     Vector2 move;
     float lookRotation;
@@ -29,11 +33,15 @@ public class FPSController : MonoBehaviour
     [SerializeField] float laneChangeSpeed = 10f;
     int currentLane = 0;
 
-    [SerializeField] bool isCrouching;
+    [SerializeField] bool isRolling;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = GameObject.Find("GroundCheck");
+        capsuleCollider = GetComponent<CapsuleCollider>();
+
+        originalCenter = capsuleCollider.center;
+        originalHeight = capsuleCollider.height;
     }
     void Start()
     {
@@ -68,15 +76,22 @@ public class FPSController : MonoBehaviour
         anim.SetTrigger("Jump");
     }
 
-    IEnumerator CrouchAction()
+    IEnumerator RollAction()
     {
-        isCrouching = true;
+        isRolling = true;
 
         anim.SetTrigger("Roll");
 
-        yield return new WaitForSeconds(1f);
+        capsuleCollider.height = originalHeight / 2f;
 
-        isCrouching = false;
+        capsuleCollider.center = new Vector3(originalCenter.x, originalCenter.y / 2, originalCenter.z);
+
+        yield return new WaitForSeconds(rollDuration);
+
+        capsuleCollider.height = originalHeight;
+        capsuleCollider.center = originalCenter;
+
+        isRolling = false;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -104,9 +119,9 @@ public class FPSController : MonoBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed && !isCrouching)
+        if (context.performed && !isRolling)
         {
-            StartCoroutine(CrouchAction());
+            StartCoroutine(RollAction());
         }
     }
 }

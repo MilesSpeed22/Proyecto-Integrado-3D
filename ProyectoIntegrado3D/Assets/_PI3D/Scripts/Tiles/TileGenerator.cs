@@ -47,7 +47,11 @@ public class TileGenerator : MonoBehaviour
 
     void SpawnTile()
     {
-        int index = GetRandomPrefabIndex();
+
+        int index;
+
+        if (metersCount < 1) index = 0;
+        else index = GetRandomPrefabIndex();
 
         Vector3 spawnPos;
 
