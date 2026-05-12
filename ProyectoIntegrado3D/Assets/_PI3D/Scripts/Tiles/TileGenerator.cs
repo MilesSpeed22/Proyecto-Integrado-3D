@@ -50,7 +50,7 @@ public class TileGenerator : MonoBehaviour
 
         int index;
 
-        if (metersCount < 1) index = 0;
+        if (metersCount < 0.5f) index = 0;
         else index = GetRandomPrefabIndex();
 
         Vector3 spawnPos;
