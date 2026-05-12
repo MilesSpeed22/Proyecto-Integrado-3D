@@ -8,7 +8,7 @@ public class FPSController : MonoBehaviour
 {
 
     Rigidbody rb;
-    CapsuleCollider capsuleCollider;
+    CapsuleCollider playerCollider;
     float originalHeight;
     Vector3 originalCenter;
     [SerializeField] float rollDuration = 1f;
@@ -38,10 +38,10 @@ public class FPSController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = GameObject.Find("GroundCheck");
-        capsuleCollider = GetComponent<CapsuleCollider>();
+        playerCollider = GetComponent<CapsuleCollider>();
 
-        originalCenter = capsuleCollider.center;
-        originalHeight = capsuleCollider.height;
+        originalCenter = playerCollider.center;
+        originalHeight = playerCollider.height;
     }
     void Start()
     {
@@ -82,14 +82,14 @@ public class FPSController : MonoBehaviour
 
         anim.SetTrigger("Roll");
 
-        capsuleCollider.height = originalHeight / 2f;
+        playerCollider.height = originalHeight / 2f;
 
-        capsuleCollider.center = new Vector3(originalCenter.x, originalCenter.y / 2, originalCenter.z);
+        playerCollider.center = new Vector3(originalCenter.x, originalCenter.y / 0.5f, originalCenter.z);
 
         yield return new WaitForSeconds(rollDuration);
 
-        capsuleCollider.height = originalHeight;
-        capsuleCollider.center = originalCenter;
+        playerCollider.height = originalHeight;
+        playerCollider.center = originalCenter;
 
         isRolling = false;
     }
@@ -102,10 +102,12 @@ public class FPSController : MonoBehaviour
 
         if (input > 0)
         {
+            anim.SetTrigger("Right");
             currentLane++;
         }
         else if (input < 0) 
         {
+            anim.SetTrigger("Left");
             currentLane--;
         }
 
