@@ -1,5 +1,7 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -7,14 +9,13 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] int maxHealth = 3;
     [SerializeField] GameObject camObject;
     [SerializeField] CameraShake camShake;
+    [SerializeField] Animator anim;
+    bool isDead = false;
+    [SerializeField] TileGenerator tileGenerator;
     void Start()
     {
         health = maxHealth;
         camShake = camObject.GetComponent<CameraShake>();
-    }
-    void Update()
-    {
-        Death();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -24,10 +25,31 @@ public class PlayerHealth : MonoBehaviour
 
             StartCoroutine(camShake.Shake(0.15f, 0.2f));
         }
+
+        if (health < 0)
+        {
+            StartCoroutine(DeathCoroutine());
+        }
     }
 
-    void Death()
+    
+    IEnumerator DeathCoroutine()
     {
-        if (health <= 0) gameObject.SetActive(false);
+        isDead = true;
+
+        PlayerPrefs.SetInt("Distance", tileGenerator.metersCount);
+
+        TilesMovement.speed = 0f;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.linearVelocity = Vector3.zero;
+
+        anim.SetTrigger("Death");
+
+        yield return new WaitForSeconds(2f);
+
+        SceneManager.LoadScene(2);
     }
+
+    
 }

@@ -84,7 +84,7 @@ public class FPSController : MonoBehaviour
 
         playerCollider.height = originalHeight / 2f;
 
-        playerCollider.center = new Vector3(originalCenter.x, originalCenter.y / 0.5f, originalCenter.z);
+        playerCollider.center = new Vector3(originalCenter.x, originalCenter.y, originalCenter.z);
 
         yield return new WaitForSeconds(rollDuration);
 

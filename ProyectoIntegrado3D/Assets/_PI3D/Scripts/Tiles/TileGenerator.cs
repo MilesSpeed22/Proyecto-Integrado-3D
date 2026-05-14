@@ -9,6 +9,7 @@ public class TileGenerator : MonoBehaviour
     public GameObject[] tilePrefabs;
     public float tileLength = 1f;
     public int tilesOnScreen = 5;
+    int spawnedTilesCount = 0;
 
     public Transform player;
     private List<GameObject> activeTiles = new List<GameObject>();
@@ -17,7 +18,7 @@ public class TileGenerator : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI meters;
-    int metersCount = 0;
+    public int metersCount = 0;
 
     [Header("Speed")]
     [SerializeField] float speedIncrease = 0.5f;
@@ -50,7 +51,7 @@ public class TileGenerator : MonoBehaviour
 
         int index;
 
-        if (metersCount < 0.5f) index = 0;
+        if (spawnedTilesCount < 2) index = 0;
         else index = GetRandomPrefabIndex();
 
         Vector3 spawnPos;
@@ -67,6 +68,8 @@ public class TileGenerator : MonoBehaviour
 
         GameObject tile = Instantiate(tilePrefabs[index], spawnPos, Quaternion.identity);
         activeTiles.Add(tile);
+
+        spawnedTilesCount++;
     }
 
     void DeleteTile()
