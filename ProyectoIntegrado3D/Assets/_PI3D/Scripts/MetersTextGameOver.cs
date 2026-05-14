@@ -10,10 +10,4 @@ public class MetersTextGameOver : MonoBehaviour
 
         metersTraveled.text = distance + "m"; 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
