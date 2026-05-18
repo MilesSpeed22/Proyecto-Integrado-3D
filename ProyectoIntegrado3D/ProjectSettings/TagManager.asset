@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - ObstacleGround
+  - Interact
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Interactable
   - 
   - 
   - 

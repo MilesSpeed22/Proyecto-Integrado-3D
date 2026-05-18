@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TilesMovement : MonoBehaviour
 {
-    public static float speed = 20f;
+    public static float speed = 10f;
 
     private void Update()
     {

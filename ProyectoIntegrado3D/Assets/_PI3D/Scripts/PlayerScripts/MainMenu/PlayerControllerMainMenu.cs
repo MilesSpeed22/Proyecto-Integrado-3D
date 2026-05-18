@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerControllerMainMenu : MonoBehaviour
 {
@@ -8,10 +10,15 @@ public class PlayerControllerMainMenu : MonoBehaviour
     Vector2 move;
     Vector2 look;
     float lookRotation;
+    [SerializeField] GameObject objectToDisable;
 
     [Header("Movement and look")]
     [SerializeField] GameObject camHolder;
     public float speed, maxForce, sensitivity;
+    [SerializeField] RaycastHit hit;
+    [SerializeField] Camera cam;
+    [SerializeField] LayerMask interactableLayer;
+    public float range;
 
     private void Awake()
     {
@@ -27,7 +34,7 @@ public class PlayerControllerMainMenu : MonoBehaviour
 
     void Update()
     {
-        
+        RaycastInteraction();
     }
 
     private void FixedUpdate()
@@ -65,6 +72,29 @@ public class PlayerControllerMainMenu : MonoBehaviour
 
     }
 
+    void RaycastInteraction()
+    {
+        Vector3 direction = cam.transform.forward;
+        if (Physics.Raycast(cam.transform.position, direction, out hit, range, interactableLayer))
+        {
+            if (hit.collider.CompareTag("Interact"))
+            {
+                if (Keyboard.current.eKey.wasPressedThisFrame)
+                {
+                    StartCoroutine(SceneChanging());
+                }
+            }
+        }
+    }
+
+    IEnumerator SceneChanging()
+    {
+        yield return null;
+
+        objectToDisable.SetActive(false);
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(1);
+    }
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
