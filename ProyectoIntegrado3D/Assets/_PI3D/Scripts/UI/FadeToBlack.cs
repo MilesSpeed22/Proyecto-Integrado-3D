@@ -25,4 +25,26 @@ public class FadeToBlack : MonoBehaviour
 
         fadeImage.color = color;
     }
+
+    public IEnumerator FadingIn()
+    {
+        float inTime = 0;
+
+        Color inColor = fadeImage.color;
+
+        while (inTime < fadeDuration)
+        {
+            inTime += Time.deltaTime;
+
+            inColor.a = 1 - (inTime / fadeDuration);
+
+            fadeImage.color = inColor;
+
+            yield return null;
+        }
+
+        inColor.a = 0;
+
+        fadeImage.color = inColor;
+    }
 }

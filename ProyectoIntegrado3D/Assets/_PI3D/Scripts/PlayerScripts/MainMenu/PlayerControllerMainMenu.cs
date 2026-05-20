@@ -11,6 +11,7 @@ public class PlayerControllerMainMenu : MonoBehaviour
     Vector2 look;
     float lookRotation;
     [SerializeField] GameObject objectToDisable;
+    [SerializeField] FadeToBlack fadeToBlack;
 
     [Header("Movement and look")]
     [SerializeField] GameObject camHolder;
@@ -92,7 +93,7 @@ public class PlayerControllerMainMenu : MonoBehaviour
         yield return null;
 
         objectToDisable.SetActive(false);
-        yield return new WaitForSeconds(1);
+        yield return StartCoroutine(fadeToBlack.FadingToBlack());
         SceneManager.LoadScene(1);
     }
     public void OnMove(InputAction.CallbackContext context)

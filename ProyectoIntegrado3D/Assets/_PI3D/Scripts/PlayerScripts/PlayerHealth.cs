@@ -15,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] FadeToBlack fadeToBlack;
     void Start()
     {
+        StartCoroutine(fadeToBlack.FadingIn());
         health = maxHealth;
         camShake = camObject.GetComponent<CameraShake>();
     }
