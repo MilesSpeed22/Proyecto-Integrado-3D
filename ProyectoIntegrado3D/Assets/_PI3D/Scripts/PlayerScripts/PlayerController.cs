@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FPSController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     Rigidbody rb;
@@ -16,8 +16,10 @@ public class FPSController : MonoBehaviour
     Vector2 move;
     float lookRotation;
 
-    [Header("Movement & Look Stats")]
+    [Header("Movement")]
     public float speed;
+    [SerializeField] float fallRoll = 20f;
+    public bool canMove = true;
 
     [Header("Jumping & GroundCheck Configuration")]
     public float jumpForce;
@@ -50,6 +52,7 @@ public class FPSController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.transform.position, groundDetectRadius, groundLayer);
+        if (rb.linearVelocity.y < 0) rb.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
     }
 
     private void FixedUpdate()
@@ -60,6 +63,8 @@ public class FPSController : MonoBehaviour
 
     void Movement()
     {
+        if (!canMove) return;
+
         Vector3 targetPosition = new Vector3(currentLane * laneDistance, transform.position.y, transform.position.z);
 
         Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, laneChangeSpeed * Time.fixedDeltaTime);
@@ -82,6 +87,8 @@ public class FPSController : MonoBehaviour
 
         anim.SetTrigger("Roll");
 
+        if (!isGrounded) rb.linearVelocity = new Vector3(rb.linearVelocity.x, -fallRoll, rb.linearVelocity.z);
+
         playerCollider.height = originalHeight / 2f;
 
         playerCollider.center = new Vector3(originalCenter.x, originalCenter.y, originalCenter.z);
@@ -96,6 +103,7 @@ public class FPSController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         if (!context.performed) return;
 
         float input = context.ReadValue<Vector2>().x;
@@ -116,11 +124,13 @@ public class FPSController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         Jump();
     }
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         if (context.performed && !isRolling)
         {
             StartCoroutine(RollAction());

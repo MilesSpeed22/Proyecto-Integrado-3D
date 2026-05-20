@@ -79,7 +79,7 @@ public class TileGenerator : MonoBehaviour
 
         metersCount += 1;
 
-        TilesMovement.speed = Mathf.Clamp(10f + speedIncrease * 0.05f, 0, maxSpeed);
+        TilesMovement.speed = Mathf.Clamp(10f + (metersCount * speedIncrease), 0, maxSpeed);
         UpdateUI();
     }
 

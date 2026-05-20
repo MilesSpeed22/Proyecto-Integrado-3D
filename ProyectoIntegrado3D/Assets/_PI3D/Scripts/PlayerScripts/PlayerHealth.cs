@@ -12,6 +12,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] Animator anim;
     bool isDead = false;
     [SerializeField] TileGenerator tileGenerator;
+    [SerializeField] FadeToBlack fadeToBlack;
     void Start()
     {
         health = maxHealth;
@@ -26,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(camShake.Shake(0.15f, 0.2f));
         }
 
-        if (health < 0)
+        if (health <= 0)
         {
             StartCoroutine(DeathCoroutine());
         }
@@ -39,6 +40,8 @@ public class PlayerHealth : MonoBehaviour
 
         PlayerPrefs.SetInt("Distance", tileGenerator.metersCount);
 
+        GetComponent<PlayerController>().canMove = false;
+
         TilesMovement.speed = 0f;
 
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -47,6 +50,8 @@ public class PlayerHealth : MonoBehaviour
         anim.SetTrigger("Death");
 
         yield return new WaitForSeconds(2f);
+
+        yield return StartCoroutine(fadeToBlack.FadingToBlack());
 
         SceneManager.LoadScene(2);
     }
