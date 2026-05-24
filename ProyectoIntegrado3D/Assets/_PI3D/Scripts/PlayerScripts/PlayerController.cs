@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        AudioManager.Instance.PlaySFX(2);
         if (!isGrounded) return;
         Vector3 jumpForces = rb.linearVelocity;
         jumpForces.y = jumpForce;
@@ -86,6 +87,8 @@ public class PlayerController : MonoBehaviour
         isRolling = true;
 
         anim.SetTrigger("Roll");
+
+        AudioManager.Instance.PlaySFX(5);
 
         if (!isGrounded) rb.linearVelocity = new Vector3(rb.linearVelocity.x, -fallRoll, rb.linearVelocity.z);
 
@@ -110,11 +113,15 @@ public class PlayerController : MonoBehaviour
 
         if (input > 0)
         {
+            AudioManager.Instance.PlaySFX(4);
+            AudioManager.Instance.PlaySFX(6);
             anim.SetTrigger("Right");
             currentLane++;
         }
         else if (input < 0) 
         {
+            AudioManager.Instance.PlaySFX(4);
+            AudioManager.Instance.PlaySFX(6);
             anim.SetTrigger("Left");
             currentLane--;
         }

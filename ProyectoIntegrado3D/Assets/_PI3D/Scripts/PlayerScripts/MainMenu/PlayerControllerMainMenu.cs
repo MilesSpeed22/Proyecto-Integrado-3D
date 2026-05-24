@@ -82,6 +82,7 @@ public class PlayerControllerMainMenu : MonoBehaviour
             {
                 if (Keyboard.current.eKey.wasPressedThisFrame)
                 {
+                    AudioManager.Instance.PlaySFX(9);
                     StartCoroutine(SceneChanging());
                 }
             }
@@ -93,6 +94,7 @@ public class PlayerControllerMainMenu : MonoBehaviour
         yield return null;
 
         objectToDisable.SetActive(false);
+        AudioManager.Instance.PlaySFX(8);
         yield return StartCoroutine(fadeToBlack.FadingToBlack());
         SceneManager.LoadScene(1);
     }
