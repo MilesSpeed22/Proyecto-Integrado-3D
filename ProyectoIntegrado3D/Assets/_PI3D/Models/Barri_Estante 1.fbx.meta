@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: a83479798e677da408d2ec83171df532
+guid: 0fc0a57af2a05f347a0ffcad72fb70b8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: uv_checker_material_uv_grid_2048x2048
-    second: {fileID: 2100000, guid: 597891732a529b1428c67fee7770238a, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
